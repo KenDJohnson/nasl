@@ -28,14 +28,15 @@ require 'nasl/parser/node'
 
 module Nasl
   class Object < Node
-    attr_reader :name, :body
+    attr_reader :name, :parent, :body
 
     include Enumerable
 
     def initialize(tree, *tokens)
       super
 
-      @body = if @tokens.length == 5 then @tokens[3] else [] end
+      @body = if @tokens.length == 5 then @tokens[3] elsif @tokens.length == 7 then @tokens[5] else [] end
+      @parent = if @tokens.length == 7 then @tokens[3] else nil end
       @name = @tokens[1]
 
       @children << :name

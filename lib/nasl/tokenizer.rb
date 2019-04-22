@@ -54,6 +54,8 @@ module Nasl
       'namespace'  => :NAMESPACE,
       'object'     => :OBJECT,
 #      'new'        => :NEW,
+      'super'      => :SUPER,
+      'extends'    => :EXTENDS,
       'var'        => :VAR,
       'public'     => :PUBLIC,
       'private'    => :PRIVATE,

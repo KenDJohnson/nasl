@@ -88,6 +88,95 @@ function foo1(){}
 
     obj_vars = tree.all(:ObjVar)
     assert_equal(2, obj_vars.length)
+
+    tree = parse(
+      <<-EOF
+object bar {
+  var a;
+  function bar() { var a = 1; }
+}
+namespace test {
+    object foo : bar {
+      var bob = 1;
+      var a1,b1;
+      function foo() : super(_FCT_ANON_ARGS[0]) { a1 = 2; }
+    }
+    object foobar extends bar {
+      var bob = 1;
+      var a1,b1;
+      function foobar() : super(_FCT_ANON_ARGS[0]) { a1 = 2; }
+    }
+  }
+      EOF
+    )
+    assert_not_nil(tree)
+
+    objects = tree.all(:Object)
+    functions = tree.all(:Function)
+
+    assert_equal(3, objects.length)
+    assert_equal(3, functions.length)
+
+    assert_equal(objects[0].name.name, "bar")
+    assert_equal(objects[0].parent, nil)
+    assert_equal(functions[0].name.name, "bar")
+    assert_equal(functions[0].fn_type, "obj")
+
+    assert_equal(objects[1].name.name, "foo")
+    assert_equal(objects[1].parent.name, "bar")
+    assert_equal(functions[1].name.name, "foo")
+    assert_equal(functions[1].fn_type, "obj")
+
+    assert_equal(objects[2].name.name, "foobar")
+    assert_equal(objects[2].parent.name, "bar")
+    assert_equal(functions[2].name.name, "foobar")
+    assert_equal(functions[2].fn_type, "obj")
+
+
+    tree = parse(
+      <<-EOF
+namespace test {
+    object bar {
+      var a;
+      function bar() { var a = 1; }
+    }
+    object foo : test::bar {
+      var bob = 1;
+      var a1,b1;
+      function foo() : super(_FCT_ANON_ARGS[0]) { a1 = 2; }
+    }
+    object foobar extends test::bar {
+      var bob = 1;
+      var a1,b1;
+      function foobar() : super(_FCT_ANON_ARGS[0]) { a1 = 2; }
+    }
+  }
+      EOF
+    )
+    assert_not_nil(tree)
+
+    objects = tree.all(:Object)
+    functions = tree.all(:Function)
+
+    assert_equal(3, objects.length)
+    assert_equal(3, functions.length)
+
+    assert_equal(objects[0].name.name, "bar")
+    assert_equal(objects[0].parent, nil)
+    assert_equal(functions[0].name.name, "bar")
+    assert_equal(functions[0].fn_type, "obj")
+
+    assert_equal(objects[1].name.name, "foo")
+    assert_equal(objects[1].parent.name, "test::bar")
+    assert_equal(functions[1].name.name, "foo")
+    assert_equal(functions[1].fn_type, "obj")
+
+    assert_equal(objects[2].name.name, "foobar")
+    assert_equal(objects[2].parent.name, "test::bar")
+    assert_equal(functions[2].name.name, "foobar")
+    assert_equal(functions[2].fn_type, "obj")
+
+
   end
 
 end

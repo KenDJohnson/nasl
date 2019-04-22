@@ -37,7 +37,15 @@ module Nasl
       @fn_type = @tokens[1]
 
       if @fn_type == "obj"
-        if @tokens.length == 8 
+        if @tokens.length == 11
+          @name = @tokens[1]
+          @params = @tokens[3]
+          @attribute = nil
+        elsif @tokens.length == 10
+          @name = @tokens[1]
+          @params = []
+          @attribute = nil
+        elsif @tokens.length == 8
           @name = @tokens[3]
           @attribute = @tokens[0]
           @params = @tokens[5]          
@@ -51,7 +59,7 @@ module Nasl
             @attribute = @tokens[0]
             @params = []
           end
-	elsif @tokens.length == 6
+        elsif @tokens.length == 6
           @attribute = nil
           @params = []
           @name = @tokens[2]
