@@ -126,7 +126,6 @@ rule
                { n(:Function, val[0], 'obj', val[1], val[2], val[3], val[4], val[5]) }
                | FUNCTION ident LPAREN RPAREN block
                { n(:Function, val[0], 'obj', val[1], val[2], val[3], val[4]) }
-
                | FUNCTION ident LPAREN params RPAREN COLON SUPER LPAREN lval RPAREN block
                { n(:Function, val[0], 'obj', val[1], val[2], val[3], val[4], val[5]) }
                | FUNCTION ident LPAREN RPAREN COLON SUPER LPAREN lval RPAREN block
